@@ -1,0 +1,27 @@
+
+  Wsh Str Args
+  FileSystem
+  FieldSet List Asv TextFile
+  Shell PowerShell
+
+  { stdout } = Wsh
+  { get-args } = Args
+  { script, quote } = PowerShell
+
+  { secure-string } = get-args <[ secure-string ]>
+
+  from-secure-string = script do
+
+    * 'param($base64)'
+
+      'Add-Type -AssemblyName System.Security'
+
+      '$secure = [System.Convert]::FromBase64String($base64)'
+      '$bytes = [System.Security.Cryptography.ProtectedData]::Unprotect($secure, $null, [Security.Cryptography.DataProtectionScope]::LocalMachine)'
+      '$plainText = [System.Text.Encoding]::Unicode.GetString($bytes)'
+
+      quote '$plainText'
+
+  { stdout: output } = from-secure-string secure-string
+
+  stdout output
