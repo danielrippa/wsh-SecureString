@@ -4,6 +4,7 @@
   FieldSet List Asv TextFile
   Shell PowerShell
 
+  { stdout } = Wsh
   { get-args } = Args
   { script, quote } = PowerShell
 
@@ -23,4 +24,4 @@
 
   { stdout: output } = to-secure-string plain-text
 
-  WScript.Echo output
+  stdout output
